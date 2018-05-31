@@ -41,6 +41,7 @@ class ContactHelper:
         # submit add new contact
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.app.navigation.return_to_home_page()
+        self.contact_cache = None
 
     def edit_first(self, contact):
         wd = self.app.wd
@@ -80,6 +81,7 @@ class ContactHelper:
         # submit update
         wd.find_element_by_name("update").click()
         self.app.navigation.return_to_home_page()
+        self.contact_cache = None
 
     def delete_first_contact(self):
         wd = self.app.wd
@@ -90,6 +92,7 @@ class ContactHelper:
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
         self.app.navigation.return_to_home_page()
+        self.contact_cache = None
 
     def open_add_new_contact_page(self):
         wd = self.app.wd
@@ -105,13 +108,16 @@ class ContactHelper:
         wd = self.app.wd
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.open_home_page()
-        contacts = []
-        for element in wd.find_elements_by_name("entry"):
-            text = element.find_element_by_xpath("td[2]").text
-            text2 = element.find_element_by_xpath("td[3]").text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            contacts.append(Contact(lastname=text, id=id, firstname=text2))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.contact_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                text = element.find_element_by_xpath("td[2]").text
+                text2 = element.find_element_by_xpath("td[3]").text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.contact_cache.append(Contact(lastname=text, id=id, firstname=text2))
+        return list(self.contact_cache)
