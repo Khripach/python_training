@@ -43,11 +43,14 @@ class ContactHelper:
         self.app.navigation.return_to_home_page()
         self.contact_cache = None
 
-    def edit_first(self, contact):
+    def edit_first(self):
+        self.edit_contact_by_index(0)
+
+    def edit_contact_by_index(self, index, contact):
         wd = self.app.wd
         self.open_home_page()
         # submit edit first contact
-        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr["+str(index+2)+"]/td[8]/a/img").click()
         # fill contact form
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -84,10 +87,13 @@ class ContactHelper:
         self.contact_cache = None
 
     def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
         self.open_home_page()
         # select first contact
-        wd.find_element_by_name("selected[]").click()
+        wd.find_elements_by_name("selected[]")[index].click()
         # submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
