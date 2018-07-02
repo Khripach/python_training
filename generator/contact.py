@@ -23,7 +23,7 @@ for o, a in opts:
         f = a
 
 def random_string(prefix, maxlen):
-    symbols = string.ascii_letters + string.digits + string.punctuation + " "*10
+    symbols = string.ascii_letters + string.digits + " "*10
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
@@ -32,7 +32,7 @@ def random_number(prefix, maxlen):
 
 
 def random_email(prefix, maxlen):
-    symbols = string.ascii_letters + string.digits + string.punctuation
+    symbols = string.ascii_letters + string.digits
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))]) + "@mail.ru"
 
 
