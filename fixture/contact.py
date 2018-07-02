@@ -105,6 +105,60 @@ class ContactHelper:
         self.app.navigation.return_to_home_page()
         self.contact_cache = None
 
+    def edit_contact_by_id(self, id, contact):
+        wd = self.app.wd
+        self.open_home_page()
+        self.open_edit_page_by_id(id)
+        # fill contact form
+        wd.find_element_by_name("firstname").click()
+        wd.find_element_by_name("firstname").clear()
+        wd.find_element_by_name("firstname").send_keys(contact.firstname)
+        wd.find_element_by_name("lastname").click()
+        wd.find_element_by_name("lastname").clear()
+        wd.find_element_by_name("lastname").send_keys(contact.lastname)
+        wd.find_element_by_name("nickname").click()
+        wd.find_element_by_name("nickname").clear()
+        wd.find_element_by_name("nickname").send_keys(contact.nickname)
+        wd.find_element_by_name("company").click()
+        wd.find_element_by_name("company").clear()
+        wd.find_element_by_name("company").send_keys(contact.company)
+        wd.find_element_by_name("address").click()
+        wd.find_element_by_name("address").click()
+        wd.find_element_by_name("address").clear()
+        wd.find_element_by_name("address").send_keys(contact.address)
+        wd.find_element_by_name("home").click()
+        wd.find_element_by_name("home").clear()
+        wd.find_element_by_name("home").send_keys(contact.homephone)
+        wd.find_element_by_name("mobile").click()
+        wd.find_element_by_name("mobile").clear()
+        wd.find_element_by_name("mobile").send_keys(contact.mobilephone)
+        wd.find_element_by_name("work").click()
+        wd.find_element_by_name("work").clear()
+        wd.find_element_by_name("work").send_keys(contact.workphone)
+        wd.find_element_by_name("phone2").click()
+        wd.find_element_by_name("phone2").clear()
+        wd.find_element_by_name("phone2").send_keys(contact.secondaryphone)
+        wd.find_element_by_name("email").click()
+        wd.find_element_by_name("email").clear()
+        wd.find_element_by_name("email").send_keys(contact.email)
+        if not wd.find_element_by_xpath("//div[@id='content']/form[1]/select[1]//option[13]").is_selected():
+            wd.find_element_by_xpath("//div[@id='content']/form[1]/select[1]//option[13]").click()
+        if not wd.find_element_by_xpath("//div[@id='content']/form[1]/select[2]//option[10]").is_selected():
+            wd.find_element_by_xpath("//div[@id='content']/form[1]/select[2]//option[10]").click()
+        wd.find_element_by_name("byear").click()
+        wd.find_element_by_name("byear").clear()
+        wd.find_element_by_name("byear").send_keys(contact.byear)
+        # submit update
+        wd.find_element_by_name("update").click()
+        self.app.navigation.return_to_home_page()
+        self.contact_cache = None
+
+    def open_edit_page_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        contact = wd.find_element_by_xpath(".//input[@id='%s']/../.." % id)
+        contact.find_element_by_xpath(".//td[8]/a/img").click()
+
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
 
@@ -118,6 +172,20 @@ class ContactHelper:
         wd.switch_to_alert().accept()
         self.app.navigation.return_to_home_page()
         self.contact_cache = None
+
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        self.select_contact_by_id(id)
+        # submit deletion
+        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        wd.switch_to_alert().accept()
+        self.app.navigation.return_to_home_page()
+        self.contact_cache = None
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
     def open_add_new_contact_page(self):
         wd = self.app.wd
